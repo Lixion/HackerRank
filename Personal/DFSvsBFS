@@ -1,0 +1,51 @@
+dictIn = {"a":1,
+ "b":2,
+ "c":{
+   "d":3,
+   "e":{
+    "f":4
+   }
+ },
+ "g": 5
+}
+
+def getChildrenByRecursion(dictIn, listOut):
+  for key, value in dictIn.items():
+    if type(value) is int:
+      listOut.append(value)
+    else:
+       getChildrenByRecursion(value, listOut)
+
+def getChildrenNoRecursion(dictIn, listOut):
+  __stack = []
+  __stack.append(dictIn)
+  insert_pos_stack = []
+  curr_pos = 0
+  while __stack:
+    top = __stack.pop()
+    if insert_pos_stack:
+      insert_pos = insert_pos_stack.pop()
+      curr_pos = insert_pos
+    else:
+      insert_pos = None
+    for key, value in top.items():
+      if type(value) is int:
+        if insert_pos is None:
+          listOut.append(value)
+          curr_pos += 1
+        else:
+          listOut.insert(insert_pos, value)
+      else:
+        __stack.append(value)
+        insert_pos_stack.append(curr_pos)
+        
+listOut1 = []
+listOut2 = []
+
+#print dictIn {'a': 1, 'c': {'e': {'f': 4}, 'd': 3}, 'b': 2, 'g': 5}
+#out should be [1, 4, 3, 2, 5]
+getChildrenByRecursion(dictIn, listOut1) #[1, 4, 3, 2, 5] 
+getChildrenNoRecursion(dictIn, listOut2) #[1, 4, 3, 2, 5] 
+
+print listOut1
+print listOut2
